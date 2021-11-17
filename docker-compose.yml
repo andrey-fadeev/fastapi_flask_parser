@@ -1,0 +1,25 @@
+version: "3.7"
+services:
+    fastapi:
+        container_name: fastapi
+        build:
+            context: .
+            dockerfile: fastapi.Dockerfile
+        ports:
+            - "8000:8000"
+        depends_on:
+            - worker
+
+    worker:
+        container_name: celery_worker
+        build:
+            context: .
+            dockerfile: celery.Dockerfile
+        depends_on:
+            - rabbitmq
+
+    rabbitmq:
+        container_name: 'rabbitmq'
+        image: rabbitmq:3.9
+        ports:
+            - "5672:5672"

@@ -1,0 +1,29 @@
+version: "3.7"
+services:
+    flask:
+        container_name: flask
+        build:
+            context: .
+            dockerfile: flask.Dockerfile
+        ports:
+            - "5000:5000"
+        depends_on:
+            - worker
+
+    worker:
+        container_name: celery_worker
+        build:
+            context: .
+            dockerfile: celery.Dockerfile
+        depends_on:
+            - rabbitmq
+
+    # redis:
+    #     image: redis:6.2.6
+    #     command: --port 6380
+
+    rabbitmq:
+        container_name: 'rabbitmq'
+        image: rabbitmq:3.9
+        ports:
+            - "5672:5672"
